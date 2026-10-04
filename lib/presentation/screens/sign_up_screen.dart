@@ -1,6 +1,7 @@
-import 'package:connect_me_community_app/presentation/screens/home_screen.dart';
-import 'package:connect_me_community_app/presentation/screens/login_screen.dart';
+import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
+import 'package:connect_me_community_app/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -11,222 +12,180 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  final RegExp emailRegExp = RegExp(r'^[\w.-]+@[\w.-]+\.\w+$');
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  bool _obsecureText = true;
-  bool _obsecureTextConfirm = true;
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
 
   @override
   void dispose() {
+    _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
+  void _submit() {
+    if (!_formKey.currentState!.validate()) return;
+    context.read<AuthCubit>().signUp(
+          fullName: _fullNameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('SignUp Screen'), centerTitle: true),
-      body: Form(
-        key: _formKey,
-        child: Stack(
-          children: [
-            // Layer 1: purple background (fills the top part)
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF5151C6), Color(0xFF888BF4)],
+    final isLoading = context.watch<AuthCubit>().state is AuthLoading;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthFailure) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.message)));
+        }
+        // Sign-up sits on top of the login screen. Close it so that
+        // the HomeScreen chosen by main.dart becomes visible.
+        if (state is Authenticated) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Sign Up Screen'), centerTitle: true),
+        body: Form(
+          key: _formKey,
+          child: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF5151C6), Color(0xFF888BF4)],
+                  ),
                 ),
               ),
-            ),
-
-            // Layer 2: white rounded container on top, aligned to the bottom
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: FractionallySizedBox(
-                heightFactor: 0.67, // roughly the 2/3
-                widthFactor: 1,
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: Container(
-                  clipBehavior: Clip.antiAlias,
+                  width: double.infinity,
+                  height: screenHeight * 0.75,
                   decoration: const BoxDecoration(
-                    color: Colors.white, // needed, otherwise it's transparent
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(30),
-                    ),
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(35)),
                   ),
                   child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 35, 20, 30),
-                      child: Column(
-                        children: [
-                          //email field
-                          TextFormField(
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
-                              ),
-                              labelText: 'Email',
-                              hintText: 'Enter your Email',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Enter an Email';
-                              }
-                              if (!emailRegExp.hasMatch(value)) {
-                                return 'Please Enter a proper Email';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          //password field
-                          TextFormField(
-                            obscureText: _obsecureText,
-                            controller: _passwordController,
-                            decoration: InputDecoration(
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
-                              ),
-                              labelText: 'Password',
-                              hintText: 'Enter your Password',
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _obsecureText = !_obsecureText;
-                                  });
-                                },
-                                icon: Icon(
-                                  _obsecureText
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Enter a Password';
-                              }
-                              if (value.length < 6) {
-                                return 'Enter a Strong Password!';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          //CONFIRM password field
-                          TextFormField(
-                            obscureText: _obsecureTextConfirm,
-                            controller: _confirmPasswordController,
-                            decoration: InputDecoration(
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
-                              ),
-                              labelText: 'Confirm Password',
-                              hintText: 'Re-enter your Password',
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _obsecureTextConfirm = !_obsecureTextConfirm;
-                                  });
-                                },
-                                icon: Icon(
-                                  _obsecureTextConfirm
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please Confirm your Password';
-                              }
-                              if (value != _passwordController.text) {
-                                return 'Passwords do not match';
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(height: 30),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 50,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color(0xFF5151C6),
-                                    Color(0xFF888BF4),
-                                  ],
-                                ),
-                              ),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => HomeScreen(),
-                                      ),
-                                    );
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                child: Text(
-                                  'SIGN UP',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
+                    padding: const EdgeInsets.fromLTRB(20, 35, 20, 30),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _fullNameController,
+                          textCapitalization: TextCapitalization.words,
+                          decoration:
+                              _fieldStyle('Full Name', 'Enter your Full Name'),
+                          validator: AuthService.validateFullName,
+                        ),
+                        const SizedBox(height: 15),
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: _fieldStyle('Email', 'Enter your Email'),
+                          validator: AuthService.validateEmail,
+                        ),
+                        const SizedBox(height: 15),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          decoration:
+                              _fieldStyle('Password', 'Enter your Password')
+                                  .copyWith(
+                            suffixIcon: IconButton(
+                              onPressed: () => setState(
+                                  () => _obscurePassword = !_obscurePassword),
+                              icon: Icon(_obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
                             ),
                           ),
-                          SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Already have an Account?"),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => LoginScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text('LOG IN'),
-                              ),
-                            ],
+                          validator: AuthService.validatePassword,
+                        ),
+                        const SizedBox(height: 15),
+                        TextFormField(
+                          controller: _confirmPasswordController,
+                          obscureText: _obscureConfirm,
+                          decoration: _fieldStyle(
+                                  'Confirm Password', 'Re-enter your Password')
+                              .copyWith(
+                            suffixIcon: IconButton(
+                              onPressed: () => setState(
+                                  () => _obscureConfirm = !_obscureConfirm),
+                              icon: Icon(_obscureConfirm
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                            ),
                           ),
-                        ],
-                      ),
+                          validator: (value) =>
+                              AuthService.validateConfirmPassword(
+                                  value, _passwordController.text),
+                        ),
+                        const SizedBox(height: 30),
+                        Container(
+                          width: double.infinity,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF5151C6), Color(0xFF888BF4)],
+                            ),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: isLoading ? null : _submit,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                            ),
+                            child: isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white)
+                                : const Text('SIGN UP',
+                                    style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Already have an Account?'),
+                            TextButton(
+                              // Just go back to the login screen underneath
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('LOG IN'),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  InputDecoration _fieldStyle(String label, String hint) {
+    return InputDecoration(
+      filled: true,
+      labelText: label,
+      hintText: hint,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide.none,
       ),
     );
   }
