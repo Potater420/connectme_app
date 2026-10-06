@@ -1,4 +1,4 @@
-import 'package:connect_me_community_app/services/auth_services.dart';
+import 'package:connect_me_community_app/services/auth_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 sealed class AuthState {}

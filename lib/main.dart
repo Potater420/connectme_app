@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  setupDependencies();
+  await setupDependencies();
   runApp(const MyApp());
 }
 
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthCubit>(
-      create: (_) => sl<AuthCubit>()..checkAuthStatus(),
+      create: (_) => sl<AuthCubit>()..checkAuthStatus(), //creates an authcubit object via SL(sl) and returns the cubit to emit the status
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ConnectMe Community App',
