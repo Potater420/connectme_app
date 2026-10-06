@@ -5,6 +5,7 @@ import 'package:connect_me_community_app/domain/repositories/post_repository.dar
 import 'package:connect_me_community_app/domain/usecases/create_post.dart';
 import 'package:connect_me_community_app/domain/usecases/get_posts.dart';
 import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
+import 'package:connect_me_community_app/presentation/blocs/post_cubit.dart';
 import 'package:connect_me_community_app/services/auth_service.dart';
 import 'package:connect_me_community_app/services/firestore_service.dart';
 import 'package:get_it/get_it.dart';
@@ -42,4 +43,7 @@ Future<void> setupDependencies() async {
 
   // Cubits
   sl.registerFactory<AuthCubit>(() => AuthCubit(sl<AuthService>()));
+  sl.registerFactory<PostCubit>(
+  () => PostCubit(sl<GetPosts>(), sl<CreatePost>(), sl<AuthService>()),
+);
 }
