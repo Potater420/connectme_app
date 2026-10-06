@@ -1,6 +1,7 @@
 import 'package:connect_me_community_app/injection.dart';
 import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
 import 'package:connect_me_community_app/presentation/blocs/post_cubit.dart';
+import 'package:connect_me_community_app/presentation/screens/map_screen.dart';
 import 'package:connect_me_community_app/presentation/screens/profile_screen.dart';
 import 'package:connect_me_community_app/presentation/widgets/post_card.dart';
 import 'package:connect_me_community_app/services/biometric_service.dart';
@@ -30,6 +31,13 @@ class _HomeView extends StatelessWidget {
         title: const Text('Community Feed'),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.map),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MapScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.account_circle),
             onPressed: () => _openProfile(context),
