@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
 import 'package:connect_me_community_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = context.watch<AuthCubit>().state is AuthLoading;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final headerHeight = MediaQuery.of(context).size.height * 0.16;
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -48,130 +50,153 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.message)));
         }
-        // Sign-up sits on top of the login screen. Close it so that
-        // the HomeScreen chosen by main.dart becomes visible.
+        // Close this screen so the HomeScreen chosen by main.dart is visible.
         if (state is Authenticated) {
           Navigator.of(context).popUntil((route) => route.isFirst);
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Sign Up Screen'), centerTitle: true),
-        body: Form(
-          key: _formKey,
-          child: Stack(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFF5151C6), Color(0xFF888BF4)],
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: double.infinity,
-                  height: screenHeight * 0.75,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(35)),
-                  ),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(20, 35, 20, 30),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _fullNameController,
-                          textCapitalization: TextCapitalization.words,
-                          decoration:
-                              _fieldStyle('Full Name', 'Enter your Full Name'),
-                          validator: AuthService.validateFullName,
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: _fieldStyle('Email', 'Enter your Email'),
-                          validator: AuthService.validateEmail,
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: _obscurePassword,
-                          decoration:
-                              _fieldStyle('Password', 'Enter your Password')
-                                  .copyWith(
-                            suffixIcon: IconButton(
-                              onPressed: () => setState(
-                                  () => _obscurePassword = !_obscurePassword),
-                              icon: Icon(_obscurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                            ),
-                          ),
-                          validator: AuthService.validatePassword,
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _confirmPasswordController,
-                          obscureText: _obscureConfirm,
-                          decoration: _fieldStyle(
-                                  'Confirm Password', 'Re-enter your Password')
-                              .copyWith(
-                            suffixIcon: IconButton(
-                              onPressed: () => setState(
-                                  () => _obscureConfirm = !_obscureConfirm),
-                              icon: Icon(_obscureConfirm
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                            ),
-                          ),
-                          validator: (value) =>
-                              AuthService.validateConfirmPassword(
-                                  value, _passwordController.text),
-                        ),
-                        const SizedBox(height: 30),
-                        Container(
-                          width: double.infinity,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFF5151C6), Color(0xFF888BF4)],
-                            ),
-                          ),
-                          child: ElevatedButton(
-                            onPressed: isLoading ? null : _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                            ),
-                            child: isLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white)
-                                : const Text('SIGN UP',
-                                    style: TextStyle(color: Colors.white)),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF5151C6), Color(0xFF888BF4)],
+            ),
+          ),
+          child: SafeArea(
+            bottom: false,
+            child: LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: headerHeight,
+                      child: const Center(
+                        child: Text(
+                          'Create Account',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      constraints: BoxConstraints(
+                        minHeight: max(0, constraints.maxHeight - headerHeight),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(20, 35, 20, 30),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(35)),
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
                           children: [
-                            const Text('Already have an Account?'),
-                            TextButton(
-                              // Just go back to the login screen underneath
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('LOG IN'),
+                            TextFormField(
+                              controller: _fullNameController,
+                              textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.next,
+                              decoration: _fieldStyle(
+                                  'Full Name', 'Enter your Full Name'),
+                              validator: AuthService.validateFullName,
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              decoration:
+                                  _fieldStyle('Email', 'Enter your Email'),
+                              validator: AuthService.validateEmail,
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _passwordController,
+                              obscureText: _obscurePassword,
+                              textInputAction: TextInputAction.next,
+                              decoration: _fieldStyle(
+                                      'Password', 'Enter your Password')
+                                  .copyWith(
+                                suffixIcon: IconButton(
+                                  onPressed: () => setState(() =>
+                                      _obscurePassword = !_obscurePassword),
+                                  icon: Icon(_obscurePassword
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                              validator: AuthService.validatePassword,
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _confirmPasswordController,
+                              obscureText: _obscureConfirm,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) => _submit(),
+                              decoration: _fieldStyle('Confirm Password',
+                                      'Re-enter your Password')
+                                  .copyWith(
+                                suffixIcon: IconButton(
+                                  onPressed: () => setState(
+                                      () => _obscureConfirm = !_obscureConfirm),
+                                  icon: Icon(_obscureConfirm
+                                      ? Icons.visibility
+                                      : Icons.visibility_off),
+                                ),
+                              ),
+                              validator: (value) =>
+                                  AuthService.validateConfirmPassword(
+                                      value, _passwordController.text),
+                            ),
+                            const SizedBox(height: 30),
+                            Container(
+                              width: double.infinity,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF5151C6),
+                                    Color(0xFF888BF4),
+                                  ],
+                                ),
+                              ),
+                              child: ElevatedButton(
+                                onPressed: isLoading ? null : _submit,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  shadowColor: Colors.transparent,
+                                ),
+                                child: isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: Colors.white)
+                                    : const Text('SIGN UP',
+                                        style: TextStyle(color: Colors.white)),
+                              ),
+                            ),
+                            const SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('Already have an Account?'),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('LOG IN'),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),

@@ -6,7 +6,9 @@ import 'package:connect_me_community_app/domain/usecases/create_post.dart';
 import 'package:connect_me_community_app/domain/usecases/get_posts.dart';
 import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
 import 'package:connect_me_community_app/presentation/blocs/post_cubit.dart';
+import 'package:connect_me_community_app/presentation/blocs/profile_cubit.dart';
 import 'package:connect_me_community_app/services/auth_service.dart';
+import 'package:connect_me_community_app/services/biometric_service.dart';
 import 'package:connect_me_community_app/services/firestore_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,7 @@ Future<void> setupDependencies() async {
   // Services
   sl.registerLazySingleton<AuthService>(AuthService.new);
   sl.registerLazySingleton<FirestoreService>(FirestoreService.new);
+  sl.registerLazySingleton<BiometricService>(BiometricService.new);
 
   // Data sources
   sl.registerLazySingleton<FirestorePostDataSource>(
@@ -44,6 +47,9 @@ Future<void> setupDependencies() async {
   // Cubits
   sl.registerFactory<AuthCubit>(() => AuthCubit(sl<AuthService>()));
   sl.registerFactory<PostCubit>(
-  () => PostCubit(sl<GetPosts>(), sl<CreatePost>(), sl<AuthService>()),
-);
+    () => PostCubit(sl<GetPosts>(), sl<CreatePost>(), sl<AuthService>()),
+  );
+  sl.registerFactory<ProfileCubit>(
+    () => ProfileCubit(sl<AuthService>(), sl<FirestoreService>()),
+  );
 }

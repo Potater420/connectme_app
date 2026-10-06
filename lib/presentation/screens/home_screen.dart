@@ -1,7 +1,9 @@
 import 'package:connect_me_community_app/injection.dart';
 import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
 import 'package:connect_me_community_app/presentation/blocs/post_cubit.dart';
+import 'package:connect_me_community_app/presentation/screens/profile_screen.dart';
 import 'package:connect_me_community_app/presentation/widgets/post_card.dart';
+import 'package:connect_me_community_app/services/biometric_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,6 +30,10 @@ class _HomeView extends StatelessWidget {
         title: const Text('Community Feed'),
         centerTitle: true,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.account_circle),
+            onPressed: () => _openProfile(context),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => context.read<AuthCubit>().signOut(),
@@ -77,6 +83,28 @@ class _HomeView extends StatelessWidget {
     );
   }
 
+  // Biometric gate: the profile only opens if the fingerprint check passes.
+  Future<void> _openProfile(BuildContext context) async {
+    final isVerified = await sl<BiometricService>().authenticate();
+    if (!context.mounted) return;
+
+    if (!isVerified) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Fingerprint check failed, or no fingerprint is set up on this device.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ProfileScreen()),
+    );
+  }
+
   // Opens a small form, then asks the cubit to create the post.
   Future<void> _showCreatePostDialog(BuildContext context) async {
     final postCubit = context.read<PostCubit>();
@@ -96,6 +124,7 @@ class _HomeView extends StatelessWidget {
             validator: (value) => (value == null || value.trim().isEmpty)
                 ? 'Post cannot be empty'
                 : null,
+            // The Form collects the text, so there's no controller to dispose.
             onSaved: (value) => postContent = value!.trim(),
           ),
         ),
