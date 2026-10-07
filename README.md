@@ -99,4 +99,4 @@ The invitation email the testers received:
 
 ## Author
 
-Your Name · [GitHub](https://github.com/Potater420)
+Peter Gamal · [GitHub](https://github.com/Potater420)
