@@ -9,7 +9,8 @@ class AuthService {
   static String? validateFullName(String? value) {
     if (value == null || value.trim().isEmpty) return 'Please enter your name';
     final firstLetter = value.trim()[0];
-    final isCapital = firstLetter == firstLetter.toUpperCase() &&
+    final isCapital =
+        firstLetter == firstLetter.toUpperCase() &&
         firstLetter != firstLetter.toLowerCase();
     return isCapital ? null : 'Name must start with a capital letter';
   }

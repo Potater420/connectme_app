@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:connect_me_community_app/injection.dart';
-import 'package:connect_me_community_app/presentation/blocs/profile_cubit.dart';
+import 'package:connectme_app/injection.dart';
+import 'package:connectme_app/presentation/blocs/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -56,7 +56,11 @@ class _ProfileView extends StatelessWidget {
                       ? null
                       : MemoryImage(base64Decode(user.photoBase64!)),
                   child: user.photoBase64 == null
-                      ? Icon(Icons.person, size: avatarRadius, color: Colors.white)
+                      ? Icon(
+                          Icons.person,
+                          size: avatarRadius,
+                          color: Colors.white,
+                        )
                       : null,
                 ),
                 const SizedBox(height: 16),

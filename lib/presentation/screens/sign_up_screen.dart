@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
-import 'package:connect_me_community_app/services/auth_service.dart';
+import 'package:connectme_app/presentation/blocs/auth_cubit.dart';
+import 'package:connectme_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,10 +33,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
     context.read<AuthCubit>().signUp(
-          fullName: _fullNameController.text.trim(),
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
+      fullName: _fullNameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -89,8 +89,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       padding: const EdgeInsets.fromLTRB(20, 35, 20, 30),
                       decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(35)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(35),
+                        ),
                       ),
                       child: Form(
                         key: _formKey,
@@ -101,7 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               textCapitalization: TextCapitalization.words,
                               textInputAction: TextInputAction.next,
                               decoration: _fieldStyle(
-                                  'Full Name', 'Enter your Full Name'),
+                                'Full Name',
+                                'Enter your Full Name',
+                              ),
                               validator: AuthService.validateFullName,
                             ),
                             const SizedBox(height: 15),
@@ -109,8 +112,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: TextInputAction.next,
-                              decoration:
-                                  _fieldStyle('Email', 'Enter your Email'),
+                              decoration: _fieldStyle(
+                                'Email',
+                                'Enter your Email',
+                              ),
                               validator: AuthService.validateEmail,
                             ),
                             const SizedBox(height: 15),
@@ -118,17 +123,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               controller: _passwordController,
                               obscureText: _obscurePassword,
                               textInputAction: TextInputAction.next,
-                              decoration: _fieldStyle(
-                                      'Password', 'Enter your Password')
-                                  .copyWith(
-                                suffixIcon: IconButton(
-                                  onPressed: () => setState(() =>
-                                      _obscurePassword = !_obscurePassword),
-                                  icon: Icon(_obscurePassword
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
-                                ),
-                              ),
+                              decoration:
+                                  _fieldStyle(
+                                    'Password',
+                                    'Enter your Password',
+                                  ).copyWith(
+                                    suffixIcon: IconButton(
+                                      onPressed: () => setState(
+                                        () => _obscurePassword =
+                                            !_obscurePassword,
+                                      ),
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                    ),
+                                  ),
                               validator: AuthService.validatePassword,
                             ),
                             const SizedBox(height: 15),
@@ -137,20 +148,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               obscureText: _obscureConfirm,
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (_) => _submit(),
-                              decoration: _fieldStyle('Confirm Password',
-                                      'Re-enter your Password')
-                                  .copyWith(
-                                suffixIcon: IconButton(
-                                  onPressed: () => setState(
-                                      () => _obscureConfirm = !_obscureConfirm),
-                                  icon: Icon(_obscureConfirm
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
-                                ),
-                              ),
+                              decoration:
+                                  _fieldStyle(
+                                    'Confirm Password',
+                                    'Re-enter your Password',
+                                  ).copyWith(
+                                    suffixIcon: IconButton(
+                                      onPressed: () => setState(
+                                        () =>
+                                            _obscureConfirm = !_obscureConfirm,
+                                      ),
+                                      icon: Icon(
+                                        _obscureConfirm
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                    ),
+                                  ),
                               validator: (value) =>
                                   AuthService.validateConfirmPassword(
-                                      value, _passwordController.text),
+                                    value,
+                                    _passwordController.text,
+                                  ),
                             ),
                             const SizedBox(height: 30),
                             Container(
@@ -173,9 +192,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 child: isLoading
                                     ? const CircularProgressIndicator(
-                                        color: Colors.white)
-                                    : const Text('SIGN UP',
-                                        style: TextStyle(color: Colors.white)),
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'SIGN UP',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                               ),
                             ),
                             const SizedBox(height: 30),

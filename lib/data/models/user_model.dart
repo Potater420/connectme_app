@@ -1,4 +1,4 @@
-import 'package:connect_me_community_app/domain/entities/user.dart';
+import 'package:connectme_app/domain/entities/user.dart';
 
 class UserModel extends AppUser {
   const UserModel({
@@ -18,11 +18,11 @@ class UserModel extends AppUser {
   }
 
   Map<String, dynamic> toJson() => {
-        'uid': uid,
-        'fullName': fullName,
-        'email': email,
-        if (photoBase64 != null) 'photoBase64': photoBase64,
-      };
+    'uid': uid,
+    'fullName': fullName,
+    'email': email,
+    if (photoBase64 != null) 'photoBase64': photoBase64,
+  };
 }
 
 /// BUILDER PATTERN: builds a UserModel step by step. Each setter returns the
@@ -55,9 +55,9 @@ class UserModelBuilder {
   }
 
   UserModel build() => UserModel(
-        uid: _uid,
-        fullName: _fullName,
-        email: _email,
-        photoBase64: _photoBase64,
-      );
+    uid: _uid,
+    fullName: _fullName,
+    email: _email,
+    photoBase64: _photoBase64,
+  );
 }

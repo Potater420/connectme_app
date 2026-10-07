@@ -1,4 +1,4 @@
-package com.example.connect_me_community_app
+package com.example.connectme_app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

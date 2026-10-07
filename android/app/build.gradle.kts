@@ -11,7 +11,7 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
 android {
-    namespace = "com.example.connect_me_community_app"
+    namespace = "com.example.connectme_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -23,7 +23,7 @@ android {
     defaultConfig {
         manifestPlaceholders["MAPS_API_KEY"] = localProperties.getProperty("MAPS_API_KEY") ?: ""
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.connect_me_community_app"
+        applicationId = "com.example.connectme_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24

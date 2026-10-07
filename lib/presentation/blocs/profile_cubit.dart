@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:connect_me_community_app/data/models/user_model.dart';
-import 'package:connect_me_community_app/domain/entities/user.dart';
-import 'package:connect_me_community_app/services/auth_service.dart';
-import 'package:connect_me_community_app/services/firestore_service.dart';
+import 'package:connectme_app/data/models/user_model.dart';
+import 'package:connectme_app/domain/entities/user.dart';
+import 'package:connectme_app/services/auth_service.dart';
+import 'package:connectme_app/services/firestore_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,7 +35,7 @@ class ProfileCubit extends Cubit<ProfileState> {
   final ImagePicker _imagePicker = ImagePicker();
 
   ProfileCubit(this._authService, this._firestoreService)
-      : super(ProfileLoading());
+    : super(ProfileLoading());
 
   Future<void> loadProfile() async {
     try {
@@ -45,7 +45,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         return;
       }
 
-      final photoBase64 = await _firestoreService.getUserPhoto(firebaseUser.uid);
+      final photoBase64 = await _firestoreService.getUserPhoto(
+        firebaseUser.uid,
+      );
       final deviceInfo = await _readDeviceInfo();
 
       // Builder pattern in use: only the fields we have are set.
@@ -55,11 +57,13 @@ class ProfileCubit extends Cubit<ProfileState> {
           .setEmail(firebaseUser.email ?? '');
       if (photoBase64 != null) builder.setPhotoBase64(photoBase64);
 
-      emit(ProfileLoaded(
-        user: builder.build(),
-        deviceModel: deviceInfo.model,
-        osVersion: deviceInfo.os,
-      ));
+      emit(
+        ProfileLoaded(
+          user: builder.build(),
+          deviceModel: deviceInfo.model,
+          osVersion: deviceInfo.os,
+        ),
+      );
     } catch (_) {
       emit(ProfileError('Could not load your profile. Please try again.'));
     }
@@ -90,11 +94,13 @@ class ProfileCubit extends Cubit<ProfileState> {
           .setPhotoBase64(photoBase64)
           .build();
 
-      emit(ProfileLoaded(
-        user: updatedUser,
-        deviceModel: current.deviceModel,
-        osVersion: current.osVersion,
-      ));
+      emit(
+        ProfileLoaded(
+          user: updatedUser,
+          deviceModel: current.deviceModel,
+          osVersion: current.osVersion,
+        ),
+      );
       return null;
     } catch (_) {
       return 'Could not update your photo. Please try again.';

@@ -1,9 +1,9 @@
-import 'package:connect_me_community_app/core/errors/failures.dart';
-import 'package:connect_me_community_app/data/datasources/firestore_post_datasource.dart';
-import 'package:connect_me_community_app/data/datasources/local_post_datasource.dart';
-import 'package:connect_me_community_app/data/models/post_model.dart';
-import 'package:connect_me_community_app/domain/entities/post.dart';
-import 'package:connect_me_community_app/domain/repositories/post_repository.dart';
+import 'package:connectme_app/core/errors/failures.dart';
+import 'package:connectme_app/data/datasources/firestore_post_datasource.dart';
+import 'package:connectme_app/data/datasources/local_post_datasource.dart';
+import 'package:connectme_app/data/models/post_model.dart';
+import 'package:connectme_app/domain/entities/post.dart';
+import 'package:connectme_app/domain/repositories/post_repository.dart';
 
 enum PostSource { remote, local }
 
@@ -28,15 +28,17 @@ class PostRepositoryImpl implements PostRepository {
   Stream<List<Post>> getPosts() async* {
     try {
       // Prefer live Firestore data and keep the local cache up to date.
-      await for (final posts
-          in _createDataSource(PostSource.remote).getPosts()) {
+      await for (final posts in _createDataSource(
+        PostSource.remote,
+      ).getPosts()) {
         await _localDataSource.cachePosts(posts);
         yield posts;
       }
     } catch (_) {
       // Remote failed: fall back to the cache, or report a friendly error.
-      final cachedPosts =
-          await _createDataSource(PostSource.local).getPosts().first;
+      final cachedPosts = await _createDataSource(PostSource.local)
+          .getPosts()
+          .first;
       if (cachedPosts.isEmpty) {
         throw const ServerFailure(
           'Could not load posts. Check your connection and try again.',

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:connect_me_community_app/core/errors/failures.dart';
-import 'package:connect_me_community_app/domain/entities/post.dart';
-import 'package:connect_me_community_app/domain/usecases/create_post.dart';
-import 'package:connect_me_community_app/domain/usecases/get_posts.dart';
-import 'package:connect_me_community_app/services/auth_service.dart';
+import 'package:connectme_app/core/errors/failures.dart';
+import 'package:connectme_app/domain/entities/post.dart';
+import 'package:connectme_app/domain/usecases/create_post.dart';
+import 'package:connectme_app/domain/usecases/get_posts.dart';
+import 'package:connectme_app/services/auth_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // The four states the feed can be in. The screen draws a different UI for each.

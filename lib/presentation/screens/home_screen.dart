@@ -1,10 +1,10 @@
-import 'package:connect_me_community_app/injection.dart';
-import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
-import 'package:connect_me_community_app/presentation/blocs/post_cubit.dart';
-import 'package:connect_me_community_app/presentation/screens/map_screen.dart';
-import 'package:connect_me_community_app/presentation/screens/profile_screen.dart';
-import 'package:connect_me_community_app/presentation/widgets/post_card.dart';
-import 'package:connect_me_community_app/services/biometric_service.dart';
+import 'package:connectme_app/injection.dart';
+import 'package:connectme_app/presentation/blocs/auth_cubit.dart';
+import 'package:connectme_app/presentation/blocs/post_cubit.dart';
+import 'package:connectme_app/presentation/screens/map_screen.dart';
+import 'package:connectme_app/presentation/screens/profile_screen.dart';
+import 'package:connectme_app/presentation/widgets/post_card.dart';
+import 'package:connectme_app/services/biometric_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

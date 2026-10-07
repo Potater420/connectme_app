@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
-import 'package:connect_me_community_app/presentation/screens/sign_up_screen.dart';
-import 'package:connect_me_community_app/services/auth_service.dart';
+import 'package:connectme_app/presentation/blocs/auth_cubit.dart';
+import 'package:connectme_app/presentation/screens/sign_up_screen.dart';
+import 'package:connectme_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,9 +29,9 @@ class _LoginScreenState extends State<LoginScreen> {
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
     context.read<AuthCubit>().signIn(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -84,8 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.fromLTRB(20, 35, 20, 30),
                       decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(35)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(35),
+                        ),
                       ),
                       child: Form(
                         key: _formKey,
@@ -95,8 +96,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: TextInputAction.next,
-                              decoration:
-                                  _fieldStyle('Email', 'Enter your Email'),
+                              decoration: _fieldStyle(
+                                'Email',
+                                'Enter your Email',
+                              ),
                               validator: AuthService.validateEmail,
                             ),
                             const SizedBox(height: 15),
@@ -105,17 +108,22 @@ class _LoginScreenState extends State<LoginScreen> {
                               obscureText: _obscureText,
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (_) => _submit(),
-                              decoration: _fieldStyle(
-                                      'Password', 'Enter your Password')
-                                  .copyWith(
-                                suffixIcon: IconButton(
-                                  onPressed: () => setState(
-                                      () => _obscureText = !_obscureText),
-                                  icon: Icon(_obscureText
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
-                                ),
-                              ),
+                              decoration:
+                                  _fieldStyle(
+                                    'Password',
+                                    'Enter your Password',
+                                  ).copyWith(
+                                    suffixIcon: IconButton(
+                                      onPressed: () => setState(
+                                        () => _obscureText = !_obscureText,
+                                      ),
+                                      icon: Icon(
+                                        _obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                    ),
+                                  ),
                               validator: AuthService.validatePassword,
                             ),
                             const SizedBox(height: 30),
@@ -139,9 +147,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 child: isLoading
                                     ? const CircularProgressIndicator(
-                                        color: Colors.white)
-                                    : const Text('LOG IN',
-                                        style: TextStyle(color: Colors.white)),
+                                        color: Colors.white,
+                                      )
+                                    : const Text(
+                                        'LOG IN',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                               ),
                             ),
                             const SizedBox(height: 30),

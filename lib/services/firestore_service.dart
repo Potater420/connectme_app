@@ -15,16 +15,17 @@ class FirestoreService {
 
   /// Returns the user's profile photo (base64 text), or null if none is saved.
   Future<String?> getUserPhoto(String uid) async {
-    final document =
-        await firestore.collection(_usersCollection).doc(uid).get();
+    final document = await firestore
+        .collection(_usersCollection)
+        .doc(uid)
+        .get();
     return document.data()?['photoBase64'] as String?;
   }
 
   /// Saves the profile photo without overwriting other fields in the document.
   Future<void> saveUserPhoto(String uid, String photoBase64) {
-    return firestore.collection(_usersCollection).doc(uid).set(
-      {'photoBase64': photoBase64},
-      SetOptions(merge: true),
-    );
+    return firestore.collection(_usersCollection).doc(uid).set({
+      'photoBase64': photoBase64,
+    }, SetOptions(merge: true));
   }
 }

@@ -1,5 +1,5 @@
-import 'package:connect_me_community_app/domain/entities/post.dart';
-import 'package:connect_me_community_app/domain/repositories/post_repository.dart';
+import 'package:connectme_app/domain/entities/post.dart';
+import 'package:connectme_app/domain/repositories/post_repository.dart';
 
 class CreatePost {
   final PostRepository _repository;

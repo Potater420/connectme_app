@@ -1,4 +1,4 @@
-import 'package:connect_me_community_app/domain/entities/post.dart';
+import 'package:connectme_app/domain/entities/post.dart';
 import 'package:flutter/material.dart';
 
 class PostCard extends StatelessWidget {
@@ -15,8 +15,9 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // Responsive: margins scale with the screen width.
     final horizontalMargin = MediaQuery.of(context).size.width * 0.04;
-    final authorInitial =
-        post.authorName.isEmpty ? '?' : post.authorName[0].toUpperCase();
+    final authorInitial = post.authorName.isEmpty
+        ? '?'
+        : post.authorName[0].toUpperCase();
 
     return Card(
       margin: EdgeInsets.symmetric(horizontal: horizontalMargin, vertical: 8),

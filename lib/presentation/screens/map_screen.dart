@@ -1,4 +1,4 @@
-import 'package:connect_me_community_app/presentation/widgets/member_marker.dart';
+import 'package:connectme_app/presentation/widgets/member_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -13,8 +13,9 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final markers =
-        MemberMarker.sampleMembers.map((member) => member.toMarker()).toSet();
+    final markers = MemberMarker.sampleMembers
+        .map((member) => member.toMarker())
+        .toSet();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Community Map'), centerTitle: true),

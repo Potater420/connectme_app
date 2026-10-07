@@ -1,4 +1,4 @@
-import 'package:connect_me_community_app/domain/entities/post.dart';
+import 'package:connectme_app/domain/entities/post.dart';
 
 /// The domain layer only knows this contract, not Firestore or local storage.
 abstract class PostRepository {

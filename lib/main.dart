@@ -1,7 +1,7 @@
-import 'package:connect_me_community_app/injection.dart';
-import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
-import 'package:connect_me_community_app/presentation/screens/home_screen.dart';
-import 'package:connect_me_community_app/presentation/screens/login_screen.dart';
+import 'package:connectme_app/injection.dart';
+import 'package:connectme_app/presentation/blocs/auth_cubit.dart';
+import 'package:connectme_app/presentation/screens/home_screen.dart';
+import 'package:connectme_app/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

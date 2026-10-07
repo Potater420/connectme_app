@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-
-import 'package:connect_me_community_app/data/datasources/firestore_post_datasource.dart';
-import 'package:connect_me_community_app/data/models/post_model.dart';
+import 'package:connectme_app/core/errors/failures.dart';
+import 'package:connectme_app/data/datasources/firestore_post_datasource.dart';
+import 'package:connectme_app/data/models/post_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Offline cache of the latest posts, stored as a JSON string.
@@ -16,7 +16,7 @@ class LocalPostDataSource implements PostDataSource {
   Stream<List<PostModel>> getPosts() => Stream.value(_readCache());
 
   @override
-  Future<void> createPost(PostModel post) =>
+  Future<void> createPost(PostModel post) async =>
       cachePosts([post, ..._readCache()]);
 
   Future<void> cachePosts(List<PostModel> posts) {
@@ -27,9 +27,15 @@ class LocalPostDataSource implements PostDataSource {
   List<PostModel> _readCache() {
     final raw = _preferences.getString(_cacheKey);
     if (raw == null) return [];
-    final decoded = jsonDecode(raw) as List<dynamic>;
-    return decoded
-        .map((item) => PostModel.fromJson(item as Map<String, dynamic>))
-        .toList();
+
+    try {
+      final decoded = jsonDecode(raw) as List<dynamic>;
+      return decoded
+          .map((item) => PostModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } catch (_) {
+      // Corrupted cache: report a friendly error instead of crashing.
+      throw const CacheFailure();
+    }
   }
 }

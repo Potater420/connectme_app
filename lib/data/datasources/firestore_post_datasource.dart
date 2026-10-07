@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connect_me_community_app/data/models/post_model.dart';
-import 'package:connect_me_community_app/services/firestore_service.dart';
+import 'package:connectme_app/data/models/post_model.dart';
+import 'package:connectme_app/services/firestore_service.dart';
 
 /// Common contract for every post data source (remote or local).
 /// The repository's factory returns this type.

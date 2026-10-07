@@ -1,15 +1,15 @@
-import 'package:connect_me_community_app/data/datasources/firestore_post_datasource.dart';
-import 'package:connect_me_community_app/data/datasources/local_post_datasource.dart';
-import 'package:connect_me_community_app/data/repositories/post_repository_impl.dart';
-import 'package:connect_me_community_app/domain/repositories/post_repository.dart';
-import 'package:connect_me_community_app/domain/usecases/create_post.dart';
-import 'package:connect_me_community_app/domain/usecases/get_posts.dart';
-import 'package:connect_me_community_app/presentation/blocs/auth_cubit.dart';
-import 'package:connect_me_community_app/presentation/blocs/post_cubit.dart';
-import 'package:connect_me_community_app/presentation/blocs/profile_cubit.dart';
-import 'package:connect_me_community_app/services/auth_service.dart';
-import 'package:connect_me_community_app/services/biometric_service.dart';
-import 'package:connect_me_community_app/services/firestore_service.dart';
+import 'package:connectme_app/data/datasources/firestore_post_datasource.dart';
+import 'package:connectme_app/data/datasources/local_post_datasource.dart';
+import 'package:connectme_app/data/repositories/post_repository_impl.dart';
+import 'package:connectme_app/domain/repositories/post_repository.dart';
+import 'package:connectme_app/domain/usecases/create_post.dart';
+import 'package:connectme_app/domain/usecases/get_posts.dart';
+import 'package:connectme_app/presentation/blocs/auth_cubit.dart';
+import 'package:connectme_app/presentation/blocs/post_cubit.dart';
+import 'package:connectme_app/presentation/blocs/profile_cubit.dart';
+import 'package:connectme_app/services/auth_service.dart';
+import 'package:connectme_app/services/biometric_service.dart';
+import 'package:connectme_app/services/firestore_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,4 +1,4 @@
-import 'package:connect_me_community_app/domain/entities/post.dart';
+import 'package:connectme_app/domain/entities/post.dart';
 
 /// A Post that knows how to convert itself to and from JSON.
 /// The timestamp is stored as milliseconds, so the same JSON works for
@@ -32,9 +32,9 @@ class PostModel extends Post {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'authorName': authorName,
-        'content': content,
-        'timestamp': timestamp.millisecondsSinceEpoch,
-      };
+    'id': id,
+    'authorName': authorName,
+    'content': content,
+    'timestamp': timestamp.millisecondsSinceEpoch,
+  };
 }

@@ -1,4 +1,4 @@
-# connect_me_community_app
+# connectme_app
 
 A new Flutter project.
 

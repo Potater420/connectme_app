@@ -1,4 +1,4 @@
-import 'package:connect_me_community_app/services/auth_service.dart';
+import 'package:connectme_app/services/auth_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 sealed class AuthState {}
@@ -23,8 +23,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   // Persisted auth: Firebase restores the session, so we only check it.
   void checkAuthStatus() => emit(
-        _authService.currentUser != null ? Authenticated() : Unauthenticated(),
-      );
+    _authService.currentUser != null ? Authenticated() : Unauthenticated(),
+  );
 
   Future<void> signIn({required String email, required String password}) async {
     emit(AuthLoading());
